@@ -107,6 +107,8 @@ class Team_members {
 
 		$query = new WP_Query($args);
 
+		ob_start();
+
 		if ( $query->have_posts() ) {
 
 			echo '<ul>';
@@ -134,6 +136,8 @@ class Team_members {
 		wp_reset_postdata();
 
 		//var_dump($query);
+
+		return ob_get_clean();
 
 	}
 }
