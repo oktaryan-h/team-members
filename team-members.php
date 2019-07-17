@@ -93,6 +93,32 @@ class Team_members {
 		return $meta_boxes;
 	}
 
+	function native_metabox() {
+		add_meta_box(
+            'wporg_box_id',           // Unique ID
+            'Custom Meta Box Title',  // Box title
+            array($this,'native_metabox_html'),  // Content callback, must be of type callable
+            'team_members'                   // Post type
+        );
+	}
+
+	function native_metabox_html($post) {
+		$a = get_post_meta($post->ID);
+		//var_dump($a);
+		?>
+		<input name="mb-position" type="text" value="<?php echo $a['mb-position'][0] ?>">
+		<input name="mb-email" type="text" value="<?php echo $a['mb-email'][0] ?>">
+		<input name="mb-phone" type="text" value="<?php echo $a['mb-phone'][0] ?>">
+		<?php
+	}
+
+	function save_metabox($post_id) {
+    //if (array_key_exists('wporg_field', $_POST)) {
+        if (isset($_POST['mb-position'])) update_post_meta($post_id,'mb-position',$_POST['mb-position']);
+        if (isset($_POST['mb-email'])) update_post_meta($post_id,'mb-email',$_POST['mb-email']);
+        if (isset($_POST['mb-phone'])) update_post_meta($post_id,'mb-phone',$_POST['mb-phone']);
+    }
+
 	function show_team_members($attr) {
 
 		$a = shortcode_atts(array(
@@ -143,7 +169,12 @@ class Team_members {
 }
 
 $team_members = new Team_members;
+
 add_action('init', array($team_members,'create_movie_review'));
+
+add_action('add_meta_boxes', array($team_members,'native_metabox'));
+add_action('save_post', array($team_members,'save_metabox'));
+
 add_filter('rwmb_meta_boxes', array($team_members,'wp_team_members_metabox'));
 add_shortcode('team-members', array($team_members, 'show_team_members'));
 
