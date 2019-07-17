@@ -64,9 +64,15 @@ class Team_members {
 
 	function save_metabox($post_id) {
     //if (array_key_exists('wporg_field', $_POST)) {
-		if (isset($_POST['mb-position'])) update_post_meta($post_id,'mb-position',$_POST['mb-position']);
-		if (isset($_POST['mb-email'])) update_post_meta($post_id,'mb-email',$_POST['mb-email']);
-		if (isset($_POST['mb-phone'])) update_post_meta($post_id,'mb-phone',$_POST['mb-phone']);
+		if (isset($_POST['mb-position'])) {
+			update_post_meta($post_id,'mb-position',$_POST['mb-position']);
+		}
+		if (isset($_POST['mb-email'])) {
+			update_post_meta($post_id,'mb-email',$_POST['mb-email']);
+		}
+		if (isset($_POST['mb-phone'])) {
+			update_post_meta($post_id,'mb-phone',$_POST['mb-phone']);
+		}
 	}
 
 	function show_team_members($attr) {
@@ -97,10 +103,22 @@ class Team_members {
 				echo '<li>'.get_post_meta(get_the_ID(),'mb-image',true).'</li>';
 				echo '<li>'.get_the_title().'</li>';
 				echo '<li><strong>'.get_post_meta(get_the_ID(),'mb-position',true).'</strong></li>';
-				if (isset($a['email'])) if ($a['email'] != 'false') echo '<li>'.get_post_meta(get_the_ID(),'mb-email',true).'</li>' ;
-				if (isset($a['phone'])) if ($a['phone'] != 'false') echo '<li>'.get_post_meta(get_the_ID(),'mb-phone',true).'</li>';
-				if (isset($a['website'])) if ($a['website'] != 'false') echo '<li>'.get_post_meta(get_the_ID(),'mb-website',true).'</li>' ;
 
+				if (isset($a['email'])) {
+					if ($a['email'] != 'false') {
+						echo '<li>'.get_post_meta(get_the_ID(),'mb-email',true).'</li>' ;
+					}
+				}
+				if (isset($a['phone'])) {
+					if ($a['phone'] != 'false') {
+						echo '<li>'.get_post_meta(get_the_ID(),'mb-phone',true).'</li>';
+					}
+				}
+				if (isset($a['website'])) {
+					if ($a['website'] != 'false') {
+						echo '<li>'.get_post_meta(get_the_ID(),'mb-website',true).'</li>' ;
+					}
+				}
 			}
 
 			echo '</ul>';
