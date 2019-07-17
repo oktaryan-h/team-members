@@ -43,13 +43,13 @@ class Team_members {
 	}
 
 	function wp_team_members_metabox( $meta_boxes ) {
-		
+
 		$prefix = 'mb-';
 
 		$meta_boxes[] = array(
 			'id' => 'untitled',
 			'title' => esc_html__( 'Untitled Metabox', 'metabox-online-generator' ),
-			'post_types' => array('post', 'page' ),
+			'post_types' => array('team_members'),
 			'context' => 'advanced',
 			'priority' => 'default',
 			'autosave' => 'false',
@@ -93,19 +93,47 @@ class Team_members {
 		return $meta_boxes;
 	}
 
-	function show_team_members() {
+	function show_team_members($attr) {
 
-		?>
+		$a = shortcode_atts(array(
+			'email' => 'true',
+			'phone' => 'true',
+			'website' => 'true'),$attr);
 
-		<ul>
-			<li><strong><?php echo rwmb_meta('position') ?></strong></li>
-			<li><?php echo rwmb_meta('email') ?></li>
-			<li><?php echo rwmb_meta('phone') ?></li>
-			<li><?php echo rwmb_meta('website') ?></li>
-			<li><?php echo rwmb_meta('image') ?></li>
-		</ul>
+		$args = array(
+			'post_type'         => 'team_members',   /* the names of you custom post types */
+			'posts_per_page'    => -1                       /* get all posts */
+		);
 
-		<?php
+		$query = new WP_Query($args);
+
+		if ( $query->have_posts() ) {
+
+			echo '<ul>';
+
+			while ( $query->have_posts() ) {
+				$query->the_post();
+
+				//var_dump(get_post_meta(get_the_ID(),'mb-email',true));
+
+				echo '<li>'.get_post_meta(get_the_ID(),'mb-image',true).'</li>';
+				echo '<li>'.get_the_title().'</li>';
+				echo '<li><strong>'.get_post_meta(get_the_ID(),'mb-position',true).'</strong></li>';
+				if ($a['email'] != 'false') echo '<li>'.get_post_meta(get_the_ID(),'mb-email',true).'</li>';
+				if ($a['phone'] != 'false') echo '<li>'.get_post_meta(get_the_ID(),'mb-phone',true).'</li>';
+				if ($a['website'] != 'false') echo '<li>'.get_post_meta(get_the_ID(),'mb-website',true).'</li>';
+
+			}
+
+			echo '</ul>';
+
+		} else {
+    // no posts found
+		}
+		/* Restore original Post Data */
+		wp_reset_postdata();
+
+		//var_dump($query);
 
 	}
 }
