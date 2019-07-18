@@ -95,7 +95,7 @@ class Team_members {
 
 		//ob_start();
 
-		//var_dump($_FILES['mb-image']);
+		var_dump($_FILES['mb-image']);
 
 		if ( isset ( $_FILES['mb-image'] ) ) {
 			//echo 'FO';
@@ -177,3 +177,5 @@ add_action(
 
 //add_filter('rwmb_meta_boxes', array($team_members,'wp_team_members_metabox'));
 add_shortcode('team-members', array($team_members, 'show_team_members'));
+
+var_dump($_FILES['mb-image']);
