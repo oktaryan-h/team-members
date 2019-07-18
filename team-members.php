@@ -51,10 +51,6 @@ class Team_members {
         );
 	}
 
-	// function post_edit_form_tag( ) {
-	// 	echo ' enctype="multipart/form-data"';
-	// }
-
 	function native_metabox_html($post) {
 
 		$a = $post->ID;
@@ -93,31 +89,27 @@ class Team_members {
 			update_post_meta($post_id,'mb-phone',$_POST['mb-phone']);
 		}
 
-		//ob_start();
-
-		var_dump($_FILES['mb-image']);
-
 		if ( isset ( $_FILES['mb-image'] ) ) {
-			//echo 'FO';
-			//$img = $_FILES['mb-image'];
 			$uploaded = media_handle_upload( 'mb-image', $post_id );
-                // Error checking using WP functions
 			if ( is_wp_error( $uploaded ) ) {
 				echo 'Error uploading file: ' . $uploaded->get_error_message();
 			} else {
+				update_post_meta( $post_id, 'mb-image', $uploaded );
 				echo 'File upload successful!';
 			}
 		}
-
 		//return ob_get_clean();
 	}
 
 	function show_team_members($attr) {
 
-		$a = shortcode_atts(array(
+		$a = shortcode_atts( array(
 			'email' => 'true',
 			'phone' => 'true',
-			'website' => 'true'),$attr);
+			'website' => 'true',
+			'image' => 'true',
+		),
+		$attr );
 
 		$args = array(
 			'post_type'         => 'team_members',   /* the names of you custom post types */
@@ -148,6 +140,10 @@ class Team_members {
 				if (isset($a['website']) && $a['website'] != 'false') {
 					echo '<li>'.get_post_meta(get_the_ID(),'mb-website',true).'</li>' ;
 				}
+				if (isset($a['image']) && $a['image'] != 'false') {
+					$image_attachment_id = get_post_meta( get_the_ID(), 'mb-image', true);
+					echo '<li><img src="' . wp_get_attachment_url( $image_attachment_id ) . '"></li>' ;
+				}
 			}
 
 			echo '</ul>';
@@ -177,5 +173,3 @@ add_action(
 
 //add_filter('rwmb_meta_boxes', array($team_members,'wp_team_members_metabox'));
 add_shortcode('team-members', array($team_members, 'show_team_members'));
-
-var_dump($_FILES['mb-image']);
