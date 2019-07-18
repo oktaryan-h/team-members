@@ -127,7 +127,6 @@ class Team_members {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 
-				echo '<li>'.get_post_meta(get_the_ID(),'mb-image',true).'</li>';
 				echo '<li>'.get_the_title().'</li>';
 				echo '<li><strong>'.get_post_meta(get_the_ID(),'mb-position',true).'</strong></li>';
 
