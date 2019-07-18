@@ -56,13 +56,31 @@ class Team_members {
 		$a = $post->ID;
 		//var_dump($a);
 		?>
-		<input name="mb-position" type="text" value="<?php echo get_post_meta($a,'mb-position',true) ?>">
-		<input name="mb-email" type="text" value="<?php echo get_post_meta($a,'mb-email',true) ?>">
-		<input name="mb-phone" type="text" value="<?php echo get_post_meta($a,'mb-phone',true) ?>">
+		<form  method="post" enctype="multipart/form-data">
+			<p>
+				Position : 
+				<input name="mb-position" type="text" value="<?php echo get_post_meta( $a, 'mb-position', true ) ?>">
+			</p>
+			<p>
+				Email :
+				<input name="mb-email" type="text" value="<?php echo get_post_meta( $a, 'mb-email', true ) ?>">
+			</p>
+			<p>
+				Phone :
+				<input name="mb-phone" type="text" value="<?php echo get_post_meta( $a, 'mb-phone', true ) ?>">
+			</p>
+			<p> Website :
+				<input name="mb-website" type="text" value="<?php echo get_post_meta( $a, 'mb-website', true ) ?>">
+			</p>
+			<p> Profile Picture :
+				<input id="mb-image" name="mb-image" type="file">
+			</p>
+		</form>
 		<?php
 	}
 
 	function save_metabox($post_id) {
+
 		if (isset($_POST['mb-position'])) {
 			update_post_meta($post_id,'mb-position',$_POST['mb-position']);
 		}
@@ -72,6 +90,22 @@ class Team_members {
 		if (isset($_POST['mb-phone'])) {
 			update_post_meta($post_id,'mb-phone',$_POST['mb-phone']);
 		}
+
+		//ob_start();
+
+		if ( isset ( $_FILES['mb-image'] ) ) {
+			echo 'FO';
+			$img = $_FILES['mb-image'];
+			$uploaded = media_handle_upload( 'mb-image', $post_id );
+                // Error checking using WP functions
+			if ( is_wp_error( $uploaded ) ) {
+				echo 'Error uploading file: ' . $uploaded->get_error_message();
+			} else {
+				echo 'File upload successful!';
+			}
+		}
+
+		//return ob_get_clean();
 	}
 
 	function show_team_members($attr) {
