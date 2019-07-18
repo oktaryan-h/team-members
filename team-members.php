@@ -51,31 +51,33 @@ class Team_members {
         );
 	}
 
+	// function post_edit_form_tag( ) {
+	// 	echo ' enctype="multipart/form-data"';
+	// }
+
 	function native_metabox_html($post) {
-		//$a = get_post_meta($post->ID);
+
 		$a = $post->ID;
-		//var_dump($a);
+
 		?>
-		<form  method="post" enctype="multipart/form-data">
-			<p>
-				Position : 
-				<input name="mb-position" type="text" value="<?php echo get_post_meta( $a, 'mb-position', true ) ?>">
-			</p>
-			<p>
-				Email :
-				<input name="mb-email" type="text" value="<?php echo get_post_meta( $a, 'mb-email', true ) ?>">
-			</p>
-			<p>
-				Phone :
-				<input name="mb-phone" type="text" value="<?php echo get_post_meta( $a, 'mb-phone', true ) ?>">
-			</p>
-			<p> Website :
-				<input name="mb-website" type="text" value="<?php echo get_post_meta( $a, 'mb-website', true ) ?>">
-			</p>
-			<p> Profile Picture :
-				<input id="mb-image" name="mb-image" type="file">
-			</p>
-		</form>
+		<p>
+			Position : 
+			<input name="mb-position" type="text" value="<?php echo get_post_meta( $a, 'mb-position', true ) ?>">
+		</p>
+		<p>
+			Email :
+			<input name="mb-email" type="text" value="<?php echo get_post_meta( $a, 'mb-email', true ) ?>">
+		</p>
+		<p>
+			Phone :
+			<input name="mb-phone" type="text" value="<?php echo get_post_meta( $a, 'mb-phone', true ) ?>">
+		</p>
+		<p> Website :
+			<input name="mb-website" type="text" value="<?php echo get_post_meta( $a, 'mb-website', true ) ?>">
+		</p>
+		<p> Profile Picture :
+			<input id="mb-image" name="mb-image" type="file">
+		</p>
 		<?php
 	}
 
@@ -93,9 +95,11 @@ class Team_members {
 
 		//ob_start();
 
+		//var_dump($_FILES['mb-image']);
+
 		if ( isset ( $_FILES['mb-image'] ) ) {
-			echo 'FO';
-			$img = $_FILES['mb-image'];
+			//echo 'FO';
+			//$img = $_FILES['mb-image'];
 			$uploaded = media_handle_upload( 'mb-image', $post_id );
                 // Error checking using WP functions
 			if ( is_wp_error( $uploaded ) ) {
@@ -163,6 +167,13 @@ add_action('init', array($team_members,'create_team_member'));
 
 add_action('add_meta_boxes', array($team_members,'native_metabox'));
 add_action('save_post_team_members', array($team_members,'save_metabox'));
+
+add_action(
+	'post_edit_form_tag',
+	function() {
+		echo ' enctype="multipart/form-data"';
+	}
+);
 
 //add_filter('rwmb_meta_boxes', array($team_members,'wp_team_members_metabox'));
 add_shortcode('team-members', array($team_members, 'show_team_members'));
