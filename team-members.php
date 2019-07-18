@@ -63,7 +63,6 @@ class Team_members {
 	}
 
 	function save_metabox($post_id) {
-    //if (array_key_exists('wporg_field', $_POST)) {
 		if (isset($_POST['mb-position'])) {
 			update_post_meta($post_id,'mb-position',$_POST['mb-position']);
 		}
@@ -98,38 +97,26 @@ class Team_members {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 
-				//var_dump(get_post_meta(get_the_ID(),'mb-email',true));
-
 				echo '<li>'.get_post_meta(get_the_ID(),'mb-image',true).'</li>';
 				echo '<li>'.get_the_title().'</li>';
 				echo '<li><strong>'.get_post_meta(get_the_ID(),'mb-position',true).'</strong></li>';
 
-				if (isset($a['email'])) {
-					if ($a['email'] != 'false') {
-						echo '<li>'.get_post_meta(get_the_ID(),'mb-email',true).'</li>' ;
-					}
+				if (isset($a['email']) && $a['email'] != 'false') {
+					echo '<li>'.get_post_meta(get_the_ID(),'mb-email',true).'</li>' ;
 				}
-				if (isset($a['phone'])) {
-					if ($a['phone'] != 'false') {
-						echo '<li>'.get_post_meta(get_the_ID(),'mb-phone',true).'</li>';
-					}
+				if (isset($a['phone']) && $a['phone'] != 'false') {
+					echo '<li>'.get_post_meta(get_the_ID(),'mb-phone',true).'</li>';
 				}
-				if (isset($a['website'])) {
-					if ($a['website'] != 'false') {
-						echo '<li>'.get_post_meta(get_the_ID(),'mb-website',true).'</li>' ;
-					}
+				if (isset($a['website']) && $a['website'] != 'false') {
+					echo '<li>'.get_post_meta(get_the_ID(),'mb-website',true).'</li>' ;
 				}
 			}
 
 			echo '</ul>';
 
-		} else {
-    // no posts found
 		}
 		/* Restore original Post Data */
 		wp_reset_postdata();
-
-		//var_dump($query);
 
 		return ob_get_clean();
 
@@ -145,5 +132,3 @@ add_action('save_post_team_members', array($team_members,'save_metabox'));
 
 //add_filter('rwmb_meta_boxes', array($team_members,'wp_team_members_metabox'));
 add_shortcode('team-members', array($team_members, 'show_team_members'));
-
-//add_action('init', [new Team_members, 'create_movie_review']);
