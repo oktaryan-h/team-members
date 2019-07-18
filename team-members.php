@@ -141,7 +141,9 @@ class Team_members {
 				}
 				if (isset($a['image']) && $a['image'] != 'false') {
 					$image_attachment_id = get_post_meta( get_the_ID(), 'mb-image', true);
-					echo '<li><img src="' . wp_get_attachment_url( $image_attachment_id ) . '"></li>' ;
+					if ( !empty( $image_attachment_id ) ) {
+						echo '<li><img src="' . wp_get_attachment_url( $image_attachment_id ) . '"></li>' ;
+					}
 				}
 			}
 
